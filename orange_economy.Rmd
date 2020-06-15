@@ -1,0 +1,54 @@
+---
+title: "orange_economy"
+output: html_document
+---
+```{r}
+orangeec <- read.csv("./orangeec.csv")
+#data(orangeec)
+summary(orangeec)
+```
+Seems a coralation in x and y
+```{r}
+pairs(orangeec[,6:10])
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot() + geom_histogram(data=orangeec, aes(x=Internet.penetration...population), fill = "blue", color = "red", binwidth = 5) +
+  labs(x = "Internet.penetration...population" ,
+       y = "Frequency",
+       title = "Internet Penetration in latam countries") +
+  theme(panel.background = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()) +
+  theme(legend.position = "none")+
+  scale_x_continuous(breaks = seq(30, 100, by=5))
+```
+
+```{r}
+library(dplyr)
+```
+
+```{r}
+economy <- mean(orangeec$GDP.PC)
+economy
+```
+
+```{r}
+orangeec <- orangeec %>% 
+  mutate(Strong_economy = ifelse(GDP.PC < economy, 'Lower GDP average', 'Upper GDP average')) 
+```
+
+
+```{r}
+ggplot(orangeec, aes(x=Strong_economy, y = Creat.Ind...GDP, fill=Strong_economy)) +
+  geom_boxplot(alpha = 0.4 ) +
+  labs(x = "Country type", y = "orange economy addition to GDP", title = "") + 
+  theme(panel.background = element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+  theme(legend.position = "none")
+  
+```
+
